@@ -19,7 +19,7 @@
         ></textarea>
         <label for="file" class="label"> Upload File </label>
         <input
-          name="file"
+          name="attachment"
           ref="file"
           type="file"
           class="tag files"
@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       content: null,
-      postImage: null,
+      attachment: null,
 
       errorMsg: "",
     };
@@ -55,17 +55,17 @@ export default {
 
   methods: {
     onFileChange(e) {
-      const postImage = e.target.files[0];
-      this.postImage = postImage;
+      const attachment = e.target.files[0];
+      this.attachment = attachment;
     },
 
     sendMessage(e) {
       e.preventDefault();
       console.log("est ce que ça marche ?");
       const fd = new FormData();
-      fd.append("file", this.postImage);
+      fd.append("attachment", this.attachment);
       fd.append("content", this.content);
-      console.log("test récup", fd.get("postImage"));
+      console.log("test récup", fd.get("attachment"));
       console.log("test récup", fd.get("content"));
       let self = this;
       axios
