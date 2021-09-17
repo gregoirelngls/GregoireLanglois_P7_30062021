@@ -1,7 +1,6 @@
 // Importations modules et fichiers
 let models   = require('../models/');
 let jwtUtils = require('../utils/jwt.utils');
-
 const fs = require('fs');
 
 
@@ -14,27 +13,29 @@ const ITEMS_LIMIT   = 50;
 
 exports.createMessage = (req, res) => {
 //identifier qui créé le message
-
+let attachment
 let id = jwtUtils.getUserId(req.headers.authorization)
   models.User.findOne({
   attributes: ['id', 'email', 'username', 'bio'],
   where: { id: id }
   })
   .then(user => {
+    console.log(user);
       if (user !== null) {
           //Récupération du corps du post,
-          let attachment = req.files.file;
           let content = req.body.content;
-          console.log('salut' , attachment.name);
-          console.log('hello' , req.body);
+          if (req.file != undefined) {
+            attachment = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+          } else {
+            attachment == null
+          };
           if (content == undefined || content.length == 0) {
               res.status(400).json({ error: 'Rien à publier' })
           } else {
               models.Message.create({
                   content: content,
-                  attachment: attachment.name,
+                  attachment: attachment,
                   userId: user.id
-                  
               })
                   .then((newPost) => {
                       res.status(201).json(newPost)
@@ -42,7 +43,7 @@ let id = jwtUtils.getUserId(req.headers.authorization)
                   .catch((err) => {
                       res.status(500).json(err)
                   })
-          };
+        };
       } else {
           res.status(400).json(error);
       }
