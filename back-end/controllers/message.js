@@ -13,42 +13,33 @@ const ITEMS_LIMIT   = 50;
 
 exports.createMessage = (req, res) => {
 //identifier qui créé le message
-let attachment
-let id = jwtUtils.getUserId(req.headers.authorization)
-  models.User.findOne({
-  attributes: ['id', 'email', 'username', 'bio'],
-  where: { id: id }
-  })
-  .then(user => {
-    console.log(user);
-      if (user !== null) {
-          //Récupération du corps du post,
-          let content = req.body.content;
-          if (req.file != undefined) {
-            attachment = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-          } else {
-            attachment == null
-          };
-          if (content == undefined || content.length == 0) {
-              res.status(400).json({ error: 'Rien à publier' })
-          } else {
-              models.Message.create({
-                  content: content,
-                  attachment: attachment,
-                  userId: user.id
-              })
-                  .then((newPost) => {
-                      res.status(201).json(newPost)
-                  })
-                  .catch((err) => {
-                      res.status(500).json(err)
-                  })
-        };
-      } else {
-          res.status(400).json(error);
+let userId = jwtUtils.getUserId(req.headers.authorization)
+const content = req.body.content;
+
+if (content == null) {
+  return res.status(400).json({ 'error' : 'Veuillez renseigner un contenu'});
+} 
+  models.User.findById(userId)
+  .then(userFound => {
+      if (!userFound ) {
+        return res.status(400).json({'error': 'utilisateur non trouvé'});
       }
-  })
-  .catch(error => res.status(500).json(error));
+      models.Message.create({
+          content: content,
+          attachment: req.file ? req.file.filename : null,
+          likes:0,
+          userId: userFound.id
+      })
+          .then((newPost) => {
+              res.status(201).json(newPost)
+          })
+          .catch((err) => {
+              res.status(500).json(err)
+          })
+      })
+      .catch(function (err) {
+        return res.status(500).json({'error': 'erreur serveur / impossible de trouvé le message'});
+    });
 }
 
 // Fonction permettant de lister tous les messages.
@@ -64,7 +55,6 @@ exports.listMessages = (req, res) => {
       if (limit > ITEMS_LIMIT) {
     limit = ITEMS_LIMIT;
   }
-  
   // On fait appel à la méthode findAll permettant de récupérer tous les messages, depuis notre model "Message".
   models.Message.findAll({
     // La méthode finAll prend en paramêtre tous les attributs précédents (les variables) mais on va les paramêtrer pour être sûr que l'utilisateur rentre des données corrects.
@@ -77,7 +67,6 @@ exports.listMessages = (req, res) => {
       attributes: ['username'],
       as: 'User'
     }] 
-  
     // Si tout se passe bien, on retourne les messages théoriquement récupérer par le serveur. Et on formate nos données sous le format JSON.
   })
   .then(function(messages) {
@@ -91,6 +80,20 @@ exports.listMessages = (req, res) => {
     console.log(err);
     res.status(500).json({ "error": "invalid fields" });
   });
+}
+
+//sélection d'un message
+exports.getOneMessage = (req, res) => {
+  models.Message.findById(req.params.id).then(function (message) {
+      if (message) {
+          res.status(200).json(message);
+      } else {
+          res.status(404).json({ "error": 'pas de message trouvé' });
+      }
+  }).catch(function (err) {
+      console.log(err);
+      res.status(500).json({ 'error': 'erreur serveur / champs invalide' });
+  })
 }
 
 exports.updateMessage = (req, res) => {
@@ -111,7 +114,7 @@ exports.updateMessage = (req, res) => {
                   .update(
                       {
                           content: req.body.content,
-                          attachement: req.body.attachment
+                          attachment: req.body.attachment
                       },
                       { where: { id: req.body.messageId } }
                   ) 
@@ -125,115 +128,35 @@ exports.updateMessage = (req, res) => {
       )
       .catch(error => res.status(500).json(error));
 }
-/*
-exports.deleteMessage = (req, res) => {
-  //récupération de l'id du demandeur pour vérification
-  let userOrder = req.body.userId;
-  //identification du demandeur
-  let id = jwtUtils.getUserId(req.headers.authorization);
-  models.User.findOne({
-      attributes: ['id', 'email', 'username', 'isAdmin'],
-      where: { id: id } 
-  })
-  .then(user => {
-    console.log(req.body.messageId);
-      //Vérification que le demandeur est soit l'admin soit le poster (vérif aussi sur le front)
-      if (user && (user.isAdmin == false || user.id == userOrder)) {
-          console.log('Suppression du Message:', req.body.messageId);
-          models.Message.findOne({
-                  where: { id: req.body.messageId }
-              })
-              .then((messageFind) => { 
-                console.log("salut" + messageFind.id);
-                  if (messageFind.attachement) {
-                      const filename = messageFind.attachement.split('/images/')[1];
-                      console.log("teseeest", filename);
-                      fs.unlink(`images/${filename}`, () => {
-                          models.Message
-                              .destroy({
-                                  where: { id: messageFind.id }
-                              })
-                              .then(() => res.end())
-                              .catch(err => res.status(500).json(err))
-                      })
-                  }
-                  else {
-                      models.Message
-                          .destroy({
-                              where: { id: messageFind.id }
-                          })
-                          .then(() => res.end())
-                          .catch(err => res.status(500).json(err))
-                  }
-              })
-              .catch(err => res.status(500).json(err))
-      } else { res.status(403).json('Utilisateur non autorisé à supprimer ce post') }
-  })
-  .catch(error => res.status(500).json(error));
-}
-*/
 
 exports.deleteMessage = (req, res) => {
-  let userOrder = req.params.id;
-  let lol = req.query;
-  let id = jwtUtils.getUserId(req.headers.authorization)
+  let messageId = req.params.id;
+  let headerAuth  = req.headers['authorization'];
+  let userId      = jwtUtils.getUserId(headerAuth);
+ 
   models.User.findOne({
     attributes: ['id', 'email', 'username', 'bio', 'isAdmin'],
-    where: {id : id}
+    where: {id : userId}
   })
   .then(user => {
-    console.log(lol);
-      //Vérification que le demandeur est soit l'admin soit le poster (vérif aussi sur le front)
-      if (user && (user.isAdmin == true || user.id == userOrder)) {
-          models.Message.findOne({
-            where: { id: id}
-          })
-          .then(messageFind => {
-            if (messageFind.attachment) {
-              const filename = messageFind.attachment.split('/images')[1];
-              console.log("teeeeeest", filename);
-              fs.unlink(`images/${filename}`, () => {
-                models.Post.destroy({
-                  where: { id: postFind.id }
-                })
-                .then(() => res.end())
-                .catch(err => res.status(500).json(err))
-              })
-            }
-            else {
-              models.Message.deleteOne({
-                where: {id: id}
-              })
-              .then(() => res.end())
-              .catch(err => res.status(500).json(err)) 
-            }
-          })
-          .catch(err => res.status(500).json(err))
-       } else { res.status(403).json('Utilisateur non autorisé à supprimer ce post') }
+    models.Message.findOne({
+      where: { id: messageId}
+    }).then(message => {
+      console.log('message ===>', message)
+      if (user && (user.isAdmin || userId == message.userId)) {
+        models.Message.destroy({
+          where: { id: messageId }
+        }).then(messageFind => {
+          return res.status(200).json('Message supprimé !')
+        })
+      } else {
+        return res.status(403).json('Utilisateur non autorisé à supprimer ce post')
+      }
     })
-    .catch(error => res.status(500).json(error));
-  };
+  })
+}
 
 
-
-
-
-  /*const { Message } = require('../models/index');
-  Message.findOne({ where: { id: req.params.id }}) // On trouve l'objet dans la base de données //
-      .then(message => {
-        console.log("salut" , message);
-        Message.destroy({ where: { id: req.params.id } }) // Méthode //
-        .then(() => res.status(200).json({ message: 'Message supprimé' }))
-        .catch(error => res.status(400).json({ error }));
-       /*const filename = Message.attachmentURL.split('/images/')[1];
-       fs.unlink(`images/${filename}`, () => {
-          Message.destroy({ where: { id: req.params.id } }) // Méthode //
-              .then(() => res.status(200).json({ message: 'Message supprimé' }))
-              .catch(error => res.status(400).json({ error }));
-       })
-      })
-      .catch(error => res.status(500).json({ error }));
-}; */
 
 
 
