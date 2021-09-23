@@ -69,10 +69,8 @@ export default {
       console.log("test récup", fd.get("content"));
       let self = this;
       axios
-        .post("http://localhost:3000/api/message/create", fd, {
+        .post("http://localhost:3000/api/message/create", this.content, {
           headers: {
-            "Content-Type": "multipart/form-data",
-
             Authorization:
               "Bearer " + JSON.parse(localStorage.getItem("user")).token,
           },
