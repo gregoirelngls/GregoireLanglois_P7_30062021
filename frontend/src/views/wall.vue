@@ -12,7 +12,7 @@
         </span>
         <br />
         <p v-if="message.attachment">
-          <img :key="message.id" :src="message.attachment" alt=" " />
+          <img :key="message.id" :src="'img/' + message.attachment" alt="" />
           <!-- <img src="../../../back-end/images/avion.jpg" alt="avion" /> -->
           <span class="userContent"> {{ message.content }} </span> <br />
         </p>
@@ -21,15 +21,15 @@
           <Thumbs />
 
           <div id="buttons">
-            <p v-if="userId == message.userId">
-              <button
-                class="button deleteMessage"
-                @click="deleteMessage(message.id)"
-              >
-                DELETE
-              </button>
-              <button class="button updateMessage">UPDATE</button>
-            </p>
+            <!-- <p v-if="userId == message.userId"> -->
+            <button
+              class="button deleteMessage"
+              @click="deleteMessage(message.id)"
+            >
+              DELETE
+            </button>
+            <button class="button updateMessage">UPDATE</button>
+            <!-- </p> -->
           </div>
         </div>
       </li>
