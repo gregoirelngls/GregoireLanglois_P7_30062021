@@ -49,15 +49,15 @@ app.use((req, res, next) => {
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100 // limit each IP to 100 requests per windowMs
-  });
+});
+
+// Sécuriser Express en définissant divers en-têtes HTTP. 
+app.use(helmet());
 
 // Envoi des données (sous la forme d'un objet de données) au serveur 
 // on demande au serveur d'accepter ou de stocker ces données (objet), qui sont incluses dans le corps (req.body) de cette demande.
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json())
-
-// Sécuriser Express en définissant divers en-têtes HTTP. 
-app.use(helmet());
+app.use(bodyParser.json());
 
 //Désactive la mise en cache du navigateur
 app.use(nocache());

@@ -4,11 +4,12 @@
     <h1>Gestion du compte utilisateur</h1>
     <div id="infoUser">
       <div class="infoUser__fields">
-        <span id="infoProfil" v-bind:key="User.id" v-for="User in Users">
-        </span>
-        <span class="userEmail">{{ User.email }} </span> <br />
-        <span class="userUsername"> {{ User.username }} </span> <br />
-        <span class="userBio">{{ User.bio }} </span> <br />
+        <div id="infoProfil" v-bind:key="User.id" v-for="User in Users"></div>
+        <span class="userEmail"> Adresse e-mail : {{ User.email }} </span><br />
+        <span class="userUsername">
+          Nom d'utilisateur : {{ User.username }} </span
+        ><br />
+        <span class="userBio"> Votre biographie : {{ User.bio }} </span><br />
       </div>
       <div id="buttons">
         <button @click="logOut" class="button logOut">

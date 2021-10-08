@@ -1,4 +1,3 @@
-
 // Imports
 const jwt = require('jsonwebtoken');
 
@@ -12,12 +11,13 @@ module.exports = (req, res, next) => {
     // d'erreur, on le next, sinon on renvoie un statut 403
     if (authHeader) {
         const token = authHeader.split(' ')[1];
-
         jwt.verify(token, 'DEVELOPMENT_TOKEN_SECRET', (err, user) => {
+            console.log(user);
             if (err) {
                 return res.status(403);
-            }
+            } else {
             next();
+            }
         });
     }
     // Sinon, on renvoie le statut 401 Unauthorized

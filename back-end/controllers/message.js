@@ -2,44 +2,40 @@
 let models   = require('../models/');
 let jwtUtils = require('../utils/jwt.utils');
 const fs = require('fs');
-
+const { json } = require("body-parser");
 
 // Création des constantes.
 const TITLE_LIMIT   = 2;
 const CONTENT_LIMIT = 4;
 const ITEMS_LIMIT   = 50;
 
-// Routes qui contient nos fonctions/logique métier CRUD pour les messages.
-
 exports.createMessage = (req, res) => {
-//identifier qui créé le message
-let userId = jwtUtils.getUserId(req.headers.authorization)
-const content = req.body.content;
+  let userId = jwtUtils.getUserId(req.headers.authorization)
+  // accessing the file
+  const myFile = req.files.file;
+  const content = req.body.content;
+  console.log("yooooooooooooo", myFile);
+  console.log("yaaaaaaaaa", content)
 
-if (content == null) {
-  return res.status(400).json({ 'error' : 'Veuillez renseigner un contenu'});
-} 
-  models.User.findById(userId)
-  .then(userFound => {
-      if (!userFound ) {
-        return res.status(400).json({'error': 'utilisateur non trouvé'});
+  //  mv() method places the file inside public directory
+  myFile.mv(`${__dirname}/../images/${myFile.name}`, function (err) {
+      if (err) {
+          console.log(err)
+          return res.status(500).send({ msg: "Error occured" });
       }
       models.Message.create({
-          content: content,
-          attachment: req.file ? req.file.filename : null,
-          likes:0,
-          userId: userFound.id
+        content: content,
+        attachment: myFile.name,
+        likes:0,
+        userId: userId
       })
-          .then((newPost) => {
-              res.status(201).json(newPost)
-          })
-          .catch((err) => {
-              res.status(500).json(err)
-          })
-      })
-      .catch(function (err) {
-        return res.status(500).json({'error': 'erreur serveur / impossible de trouvé le message'});
-    });
+        .then((newPost) => {
+            res.status(201).json(newPost)
+        })
+        .catch((err) => {
+            res.status(500).json(err)
+        })
+  });
 }
 
 // Fonction permettant de lister tous les messages.
@@ -142,7 +138,6 @@ exports.deleteMessage = (req, res) => {
     models.Message.findOne({
       where: { id: messageId}
     }).then(message => {
-      console.log('message ===>', message)
       if (user && (user.isAdmin || userId == message.userId)) {
         models.Message.destroy({
           where: { id: messageId }
@@ -155,7 +150,6 @@ exports.deleteMessage = (req, res) => {
     })
   })
 }
-
 
 
 

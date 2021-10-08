@@ -12,8 +12,7 @@ const LIKED    = 1;
 // Fonction qui permet de liker un message.
 exports.likePost = (req, res) => {
     // On identifie notre utilisateur.
-    let headerAuth  = req.headers['authorization'];
-    let userId      = jwtUtils.getUserId(headerAuth);
+    let userId = jwtUtils.getUserId(req.headers.authorization)
 
     // Paramêtre(s) utilisé(s) par nos fonctions.
     // On récupère ici l'identifiant du message concerné.

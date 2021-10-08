@@ -46,8 +46,8 @@ export default {
 
   data() {
     return {
-      content: null,
-      attachment: null,
+      content: "",
+      attachment: "",
 
       errorMsg: "",
     };
@@ -61,21 +61,20 @@ export default {
 
     sendMessage(e) {
       e.preventDefault();
-      console.log("est ce que ça marche ?");
       const fd = new FormData();
-      fd.append("attachment", this.attachment);
+      fd.append("file", this.attachment);
       fd.append("content", this.content);
-      console.log("test récup", fd.get("attachment"));
-      console.log("test récup", fd.get("content"));
       let self = this;
       axios
-        .post("http://localhost:3000/api/message/create", this.content, {
+        .post("http://localhost:3000/api/message/create", fd, {
           headers: {
+            ContentType: "multipart/form-data",
             Authorization:
               "Bearer " + JSON.parse(localStorage.getItem("user")).token,
           },
         })
-        .then(function() {
+        .then(function(r) {
+          console.log(r);
           alert("Votre message a bien été créé !");
           self.$router.push("/messages");
         })
