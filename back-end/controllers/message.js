@@ -18,7 +18,7 @@ exports.createMessage = (req, res) => {
   console.log("yaaaaaaaaa", content)
 
   //  mv() method places the file inside public directory
-  myFile.mv(`${__dirname}/../images/${myFile.name}`, function (err) {
+  myFile.mv(`${__dirname}/../../frontend/src/assets/${myFile.name}`, function (err) {
       if (err) {
           console.log(err)
           return res.status(500).send({ msg: "Error occured" });
