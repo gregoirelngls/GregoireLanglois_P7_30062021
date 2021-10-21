@@ -7,8 +7,8 @@ const router = express.Router();
 const likeCtrl = require('../controllers/like');
 
 //Routage
-router.post('/messages/:messageId/vote/like',auth, likeCtrl.likePost);
-router.post('/messages/:messageId/vote/dislike', auth, likeCtrl.dislikePost);
+router.post('/messages/vote/like/:messageId',auth, likeCtrl.likePost);
+router.post('/messages/vote/dislike/:messageId', auth, likeCtrl.dislikePost);
 
 
 module.exports = router;

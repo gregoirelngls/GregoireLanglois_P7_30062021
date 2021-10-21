@@ -14,8 +14,6 @@ exports.createMessage = (req, res) => {
   // accessing the file
   const myFile = req.files.file;
   const content = req.body.content;
-  console.log("yooooooooooooo", myFile);
-  console.log("yaaaaaaaaa", content)
 
   //  mv() method places the file inside public directory
   myFile.mv(`${__dirname}/../../frontend/src/assets/${myFile.name}`, function (err) {
@@ -102,7 +100,6 @@ exports.updateMessage = (req, res) => {
       where: { id: id }
   })
       .then(user => {
-        console.log(userOrder);
           //Vérification que le demandeur est soit l'admin soit le poster (vérif aussi sur le front)
           if (user && (user.isAdmin == false || user.id != userOrder)) {
               console.log('Modif ok pour le post :', req.body.messageId); 

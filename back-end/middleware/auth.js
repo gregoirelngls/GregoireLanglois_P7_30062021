@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
     // Récupération du token dans les paramètres
     const authHeader = req.headers.authorization;
+    console.log("auth", req.headers.authorization);
 
     // Si l'utilisateur possède une autorisation,
     // on déclare le token et on le vérifie, s'il n'y a pas
@@ -12,7 +13,7 @@ module.exports = (req, res, next) => {
     if (authHeader) {
         const token = authHeader.split(' ')[1];
         jwt.verify(token, 'DEVELOPMENT_TOKEN_SECRET', (err, user) => {
-            console.log(user);
+            console.log("coucou", user);
             if (err) {
                 return res.status(403);
             } else {

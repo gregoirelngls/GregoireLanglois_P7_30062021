@@ -13,9 +13,10 @@ module.exports = (sequelize, DataTypes) => {
           as: 'User',
           foreignKey: {
             name: 'userId',
-            allowNull: false
+            allowNull: false,
           }
-        })
+        });
+        models.Message.hasMany(models.Like);
       }
     }
   });
