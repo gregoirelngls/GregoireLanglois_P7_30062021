@@ -2,7 +2,6 @@ import { createWebHistory, createRouter } from "vue-router";
 import Login from "../views/login.vue";
 import Wall from "../views/wall.vue";
 import About from "../views/About";
-import CreateMessage from "../views/CreateMessage";
 import User from "../views/User";
 
 const routes = [
@@ -21,11 +20,6 @@ const routes = [
     name: 'About',
     path: '/about',
     component: About,
-  },
-  {
-    name: 'CreateMessage',
-    path: '/createmessage',
-    component: CreateMessage,
   },
   {
     name:'User',

@@ -1,6 +1,5 @@
 <template>
   <div id="createMessage">
-    <Header />
     <div class="formulaireType">
       <h1>Nouveau message</h1>
       <form
@@ -13,11 +12,11 @@
         <textarea
           class="tag area"
           name="content"
-          ROWS="5"
-          COLS="50"
+          ROWS="2"
+          COLS="5"
           v-model="content"
         ></textarea>
-        <label for="file" class="label"> Upload File </label>
+        <label for="file" class="label"> </label>
         <input
           name="attachment"
           ref="file"
@@ -27,7 +26,7 @@
           aria-describedby="inputFileAddon"
           @change="onFileChange"
         />
-        <button type="submit" class="tag button">Envoyer</button>
+        <button type="submit" class="tag button-send">Envoyer</button>
       </form>
     </div>
   </div>
@@ -35,14 +34,10 @@
 
 <script>
 import axios from "axios";
-//import { mapState } from "vuex";
-import Header from "../components/Header";
 
 export default {
   name: "CreateMessage",
-  components: {
-    Header,
-  },
+  components: {},
 
   data() {
     return {
@@ -50,6 +45,8 @@ export default {
       attachment: "",
 
       errorMsg: "",
+      userId: localStorage.getItem("userId"),
+      token: localStorage.getItem("token"),
     };
   },
 
@@ -73,10 +70,9 @@ export default {
               "Bearer " + JSON.parse(localStorage.getItem("user")).token,
           },
         })
-        .then(function(r) {
-          console.log(r);
+        .then(function() {
           alert("Votre message a bien été créé !");
-          self.$router.push("/messages");
+          location.reload();
         })
         .catch(function() {
           alert("Il semblerait y avoir un problème, reessayer plutard");
@@ -100,18 +96,19 @@ export default {
   justify-content: center;
   background-color: white;
   margin: 0 auto;
-  position: absolute;
-  top: 25%;
-  left: 20%;
-  padding: 3%;
-  border-radius: 1em;
-  border: 2px solid #343a40;
+  border: 3px solid rgb(4, 4, 122);
+  border-radius: 10px;
+}
+
+textarea:focus {
+  outline: none;
 }
 
 h1 {
   font-size: 4vw;
   text-align: center;
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  margin: 0;
 }
 
 form {
@@ -122,11 +119,19 @@ form {
 .tag {
   margin-top: 2%;
   background-color: antiquewhite;
+  font-size: 2vw;
 }
 
-.button {
+.button-send {
   border-radius: 2em;
   font-family: impact;
+  width: 20%;
+  font-size: 2vw;
+  margin: 2%;
+}
+
+.button-send:focus {
+  outline: none;
 }
 
 .files {

@@ -34,28 +34,34 @@ export default {
   methods: {
     likeMessage() {
       this.totallike += 1;
+      axios.defaults.headers["Authorization"] =
+        "Bearer " + JSON.parse(localStorage.getItem("user")).token;
       axios
-        .post("http://localhost:3000/api/messages/:messageId/vote/like", {
-          headers: {
-            "content-type": "application/json",
-            Authorization:
-              "Bearer " + JSON.parse(localStorage.getItem("user")).token,
-          },
-        })
+        .post(
+          "http://localhost:3000/api/messages/vote/like/" + this.message.id,
+          {
+            headers: {
+              ContentType: "application/json",
+            },
+          }
+        )
         .then((response) => console.log(response))
-        .catch((error) => console.log(error));
+        .catch((aie) => console.log(aie));
     },
 
     dislikeMessage() {
       this.totaldislike -= 1;
       axios
-        .post("http://localhost:3000/api/messages/:messageId/vote/dislike", {
-          headers: {
-            "content-type": "application/json",
-            Authorization:
-              "Bearer " + JSON.parse(localStorage.getItem("user")).token,
-          },
-        })
+        .post(
+          "http://localhost:3000/api/messages/vote/dislike/" + this.message.id,
+          {
+            headers: {
+              "content-type": "application/json",
+              Authorization:
+                "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+            },
+          }
+        )
         .then((response) => console.log(response))
         .catch((error) => console.log(error));
     },

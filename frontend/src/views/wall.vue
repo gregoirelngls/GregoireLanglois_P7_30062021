@@ -2,7 +2,7 @@
 <template>
   <div id="app">
     <Header />
-    <h1>Fil d'actualité</h1>
+    <CreateMessage />
     <ul id="listMessages">
       <li id="listMessage" v-for="message in messages" :key="message.id">
         <span class="userName"
@@ -11,17 +11,16 @@
           {{ message.createdAt.slice(11, 16) }}
         </span>
         <br />
-        <p v-if="message.attachment">
-          <img :key="message.id" :src="'img/' + message.attachment" alt="" />
-          <!-- <img src="../../../back-end/images/avion.jpg" alt="avion" /> -->
+        <div id="contentMessage">
+          <p v-if="message.attachment"></p>
+          <img :src="message.attachment" alt="" />
           <span class="userContent"> {{ message.content }} </span> <br />
-        </p>
-
+        </div>
         <div id="footer-messages">
-          <Thumbs />
+          <Thumbs :message="message" />
 
           <div id="buttons">
-            <!-- <p v-if="userId == message.userId"> -->
+            <!-- <p v-if="user.id == message.userId"> -->
             <button
               class="button deleteMessage"
               @click="deleteMessage(message.id)"
@@ -40,11 +39,13 @@
 import axios from "axios";
 import Header from "../components/Header";
 import Thumbs from "../components/Thumbs";
+import CreateMessage from "../components/CreateMessage";
 export default {
   name: "Wall",
   components: {
     Header,
     Thumbs,
+    CreateMessage,
   },
   data() {
     return {
@@ -54,6 +55,7 @@ export default {
         attachment: "",
       },
       messages: [],
+      userId: localStorage.getItem("userId"),
     };
   },
   methods: {
@@ -66,10 +68,15 @@ export default {
           },
         })
         .then((response) => {
-          this.messages = response.data;
+          console.log("oyoooo", this.message);
           console.log("coucou", this.messages);
+          this.messages = response.data;
+          this.messages.map((message) => {
+            message.attachment = require(`../assets/${message.attachment}`);
+            return message;
+          });
         })
-        .catch((error) => console.log(error));
+        .catch(() => console.log());
     },
 
     deleteMessage(id) {
@@ -82,17 +89,14 @@ export default {
           },
         })
         .then(() => {
-          console.log("quoi ??", this.messages.id);
+          console.log("quoi ??", this.message.id);
           alert("êtes vous sûr de vouloir supprimer votre message ?");
-          // console.log("lol", messageId);
-          // console.log("cavatoi", id);
-          // console.log("miaouuuu", user);
           location.reload();
         })
         .catch((error) => console.log(error));
     },
   },
-  mounted() {
+  created() {
     this.getData();
   },
 };
@@ -103,7 +107,7 @@ export default {
   list-style: none;
   margin: auto;
   padding: 0px;
-  width: 50%;
+  width: 60%;
 }
 #listMessage {
   background-color: white;
@@ -111,6 +115,12 @@ export default {
   margin-top: 2%;
   border-radius: 10px;
 }
+
+#contentMessage {
+  display: flex;
+  flex-direction: column;
+}
+
 #buttons {
   padding: 5px 10px;
   border: none;
@@ -125,6 +135,7 @@ export default {
   color: white;
   font-size: 1.5vw;
   padding: 5px 10px;
+  border-radius: 10px;
 }
 .button:focus {
   outline: none;

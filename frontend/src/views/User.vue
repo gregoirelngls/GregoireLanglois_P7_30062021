@@ -57,8 +57,8 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data);
           this.User = response.data;
+          console.log(this.User.id);
         })
         .catch((error) => console.log(error));
     },
@@ -105,6 +105,7 @@ export default {
   font-size: 1.5vw;
   padding: 5px 10px;
   margin: 2%;
+  border-radius: 10px;
 }
 
 .button:focus {
