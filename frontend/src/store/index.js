@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 
+
 // Importation d'axios pour pouvoir y faire des requêtes.
 const axios = require('axios');
 

@@ -1,14 +1,15 @@
 <template>
   <div id="iconsThumbs">
-    <button>
+    <button id="ThumbsUp" @click="alReadyLiked = !alReadyLiked">
       <i
+        :class="{ active: alReadyLiked }"
         @click.prevent="likeMessage"
         class="fas fa-thumbs-up"
         aria-hidden="true"
       ></i>
     </button>
     {{ totallike }}
-    <button>
+    <button id="ThumbsDown">
       <i
         @click.prevent="dislikeMessage"
         class="fa fa-thumbs-down"
@@ -29,8 +30,11 @@ export default {
     return {
       totallike: 0,
       totaldislike: 0,
+      alReadyLiked: false,
+      alReadyDisliked: false,
     };
   },
+  computed: {},
   methods: {
     likeMessage() {
       this.totallike += 1;
@@ -46,7 +50,7 @@ export default {
           }
         )
         .then((response) => console.log(response))
-        .catch((aie) => console.log(aie));
+        .catch((err) => console.log(err));
     },
 
     dislikeMessage() {
@@ -85,26 +89,15 @@ button {
   outline-style: none;
 }
 
+#ThumbsUp {
+  filter: grayscale(100%);
+}
+
+.active {
+  filter: grayscale(0%);
+}
+
 #iconsThumbs i {
   margin: 3%;
-}
-
-.fa {
-  color: rgb(255, 75, 75);
-  cursor: pointer;
-}
-
-.fa:hover {
-  color: rgb(182, 0, 0);
-  cursor: pointer;
-}
-
-.fas {
-  cursor: pointer;
-  color: rgb(0, 189, 0);
-}
-
-.fas:hover {
-  color: rgb(0, 104, 0);
 }
 </style>

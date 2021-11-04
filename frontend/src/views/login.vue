@@ -145,7 +145,8 @@ export default {
           // Une fois que la connexion s'est bien effectué, on passe dans le".then", et on affiche le mur avec les messages de tous les utilisateurs.
         })
         .then(
-          function() {
+          function(response) {
+            console.log("hellllo", response);
             self.$router.push("/messages");
           },
           function(error) {

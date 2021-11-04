@@ -20,15 +20,19 @@
           <Thumbs :message="message" />
 
           <div id="buttons">
-            <!-- <p v-if="user.id == message.userId"> -->
-            <button
-              class="button deleteMessage"
-              @click="deleteMessage(message.id)"
-            >
-              DELETE
-            </button>
-            <button class="button updateMessage">UPDATE</button>
-            <!-- </p> -->
+            <p v-if="userId == message.userId">
+              <button
+                class="button deleteMessage"
+                @click="deleteMessage(message.id)"
+              >
+                DELETE
+              </button>
+              <router-link class="routerLink" :to="`/Edit/${message.id}`">
+                <button class="button updateMessage">
+                  UPDATE
+                </button>
+              </router-link>
+            </p>
           </div>
         </div>
       </li>
@@ -40,6 +44,7 @@ import axios from "axios";
 import Header from "../components/Header";
 import Thumbs from "../components/Thumbs";
 import CreateMessage from "../components/CreateMessage";
+
 export default {
   name: "Wall",
   components: {
@@ -55,11 +60,13 @@ export default {
         attachment: "",
       },
       messages: [],
-      userId: localStorage.getItem("userId"),
+      userId: null,
     };
   },
+
   methods: {
     getData() {
+      this.userId = JSON.parse(localStorage.getItem("user")).userId;
       axios
         .get("http://localhost:3000/api/message", {
           headers: {
@@ -68,9 +75,8 @@ export default {
           },
         })
         .then((response) => {
-          console.log("oyoooo", this.message);
-          console.log("coucou", this.messages);
           this.messages = response.data;
+          console.log(this.messages);
           this.messages.map((message) => {
             message.attachment = require(`../assets/${message.attachment}`);
             return message;
