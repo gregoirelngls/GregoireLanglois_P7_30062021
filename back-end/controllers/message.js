@@ -12,28 +12,30 @@ const ITEMS_LIMIT   = 50;
 exports.createMessage = (req, res) => {
   let userId = jwtUtils.getUserId(req.headers.authorization)
   // accessing the file
-  const myFile = req.files.file;
+  const myFile = req.files?.file;
   const content = req.body.content;
 
   //  mv() method places the file inside public directory
+ if (myFile) { 
   myFile.mv(`${__dirname}/../../frontend/src/assets/${myFile.name}`, function (err) {
-      if (err) {
-          console.log(err)
-          return res.status(500).send({ msg: "Error occured" });
-      }
-      models.Message.create({
-        content: content,
-        attachment: myFile.name,
-        likes:0,
-        userId: userId
-      })
-        .then((newPost) => {
-            res.status(201).json(newPost)
-        })
-        .catch((err) => {
-            res.status(500).json(err)
-        })
-  });
+    if (err) {
+        console.log(err)
+        return res.status(500).send({ msg: "Error occured" });
+    }
+  })
+ }
+  models.Message.create({
+    content: content,
+    attachment: myFile?.name ?? "",
+    likes:0,
+    userId: userId
+  })
+    .then((newPost) => {
+        res.status(201).json(newPost)
+    })
+    .catch((err) => {
+        res.status(500).json(err)
+    })
 }
 
 // Fonction permettant de lister tous les messages.
