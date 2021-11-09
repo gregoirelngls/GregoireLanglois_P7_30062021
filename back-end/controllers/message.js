@@ -93,27 +93,37 @@ exports.getOneMessage = (req, res) => {
 }
 
 exports.updateMessage = (req, res) => {
+  const myFile = req.files?.file;
   //récupération de l'id du demandeur pour vérification
   let userOrder = req.body.userIdOrder;
   //identification du demandeur
   let id = jwtUtils.getUserId(req.headers.authorization);
+  if (myFile) { 
+    myFile.mv(`${__dirname}/../../frontend/src/assets/${myFile.name}`, function (err) {
+      if (err) {
+          console.log(err)
+          return res.status(500).send({ msg: "Error occured" });
+      }
+    })
+   }
   models.User.findOne({
       attributes: ['id', 'email', 'username','bio', 'isAdmin'],
       where: { id: id }
   })
       .then(user => {
+        
           //Vérification que le demandeur est soit l'admin soit le poster (vérif aussi sur le front)
           if (user && (user.isAdmin == false || user.id != userOrder)) {
-              console.log('Modif ok pour le post :', req.body.messageId); 
+              console.log('Modif ok pour le post :', req ); 
               models.Message
                   .update(
                       {
                           content: req.body.content,
-                          attachment: req.body.attachment
+                          attachment: myFile?.name ?? "",
                       },
-                      { where: { id: req.body.messageId } }
+                      { where: { id: req.params.id} }
                   ) 
-                  .then(() => res.end()) 
+                  .then(() => res.send())
                   .catch(err => res.status(500).json(err))
           } 
           else {
