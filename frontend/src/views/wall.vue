@@ -6,29 +6,36 @@
     <ul id="listMessages">
       <li id="listMessage" v-for="message in messages" :key="message.id">
         <span class="userName"
-          ><strong>Publié par :</strong> {{ message.User.username }} <br />
-          le {{ message.createdAt.split("T")[0] }} à
+          ><span id="strong">Publié par :</span> {{ message.User.username }}
+          <br />
+          <span id="strong">le </span> {{ message.createdAt.split("T")[0] }} à
           {{ message.createdAt.slice(11, 16) }}
         </span>
         <br />
         <div id="contentMessage">
           <p v-if="message.attachment"></p>
           <img :src="message.attachment" alt="" />
-          <span class="userContent"> {{ message.content }} </span> <br />
+          <span class="userContent"> {{ message.content }} </span>
         </div>
         <div id="footer-messages">
           <Thumbs :message="message" />
 
-          <div id="buttons">
+          <div id="btns">
             <p v-if="userId == message.userId">
               <button
+                aria-label="supression du message"
+                id="btn_delete"
                 class="button deleteMessage"
                 @click="deleteMessage(message.id)"
               >
                 DELETE
               </button>
               <router-link class="routerLink" :to="`/Edit/${message.id}`">
-                <button class="button updateMessage">
+                <button
+                  aria-label="modification du message"
+                  id="btn_update"
+                  class="button updateMessage"
+                >
                   UPDATE
                 </button>
               </router-link>
@@ -96,7 +103,7 @@ export default {
         })
         .then(() => {
           console.log("quoi ??", this.message.id);
-          alert("êtes vous sûr de vouloir supprimer votre message ?");
+          confirm("êtes vous sûr de vouloir supprimer votre message ?");
           location.reload();
         })
         .catch((error) => console.log(error));
@@ -113,7 +120,7 @@ export default {
   list-style: none;
   margin: auto;
   padding: 0px;
-  width: 60%;
+  width: 50%;
 }
 #listMessage {
   background-color: white;
@@ -122,46 +129,72 @@ export default {
   border-radius: 10px;
 }
 
+img {
+  max-width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+}
+
 #contentMessage {
   display: flex;
   flex-direction: column;
 }
 
-#buttons {
-  padding: 5px 10px;
-  border: none;
-  transition-duration: 0.4s;
-  margin: 1%;
-  border-radius: 10px;
+#btns {
   width: 50%;
-  display: flex;
-  flex-direction: row-reverse;
+  align-self: center;
+  text-align: center;
+  vertical-align: center;
+  margin-top: inherit;
+  margin-left: 2%;
 }
+
 .button {
   color: white;
   font-size: 1.5vw;
   padding: 5px 10px;
   border-radius: 10px;
+  margin-left: 6%;
 }
 .button:focus {
   outline: none;
   box-shadow: none;
 }
-.updateMessage {
+.updateMessage:hover {
   background-color: #0c007a;
 }
-.updateMessage:hover {
-  background-color: #100035;
+.updateMessage {
+  background-color: #160146;
 }
 .deleteMessage {
-  background-color: red;
+  background-color: rgb(66, 10, 10);
 }
 .deleteMessage:hover {
-  background-color: rgb(161, 0, 0);
+  background-color: rgb(173, 25, 25);
 }
 #footer-messages {
   display: flex;
   border-top: 1px dashed grey;
   margin-top: 2%;
+}
+
+.userContent {
+  margin-top: 3%;
+}
+
+#strong {
+  font-weight: bold;
+}
+
+@media (min-width: 1200px) {
+  #listMessages {
+    width: 35%;
+  }
+}
+
+@media (max-width: 670px) {
+  #listMessages {
+    width: 80%;
+  }
 }
 </style>

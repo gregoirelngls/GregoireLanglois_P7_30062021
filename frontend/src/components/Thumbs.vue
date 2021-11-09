@@ -1,15 +1,14 @@
 <template>
   <div id="iconsThumbs">
-    <button id="ThumbsUp" @click="alReadyLiked = !alReadyLiked">
+    <button aria-label="Thumbs up">
       <i
-        :class="{ active: alReadyLiked }"
         @click.prevent="likeMessage"
         class="fas fa-thumbs-up"
         aria-hidden="true"
       ></i>
     </button>
     {{ totallike }}
-    <button id="ThumbsDown">
+    <button aria-label="Thumbs down">
       <i
         @click.prevent="dislikeMessage"
         class="fa fa-thumbs-down"
@@ -76,9 +75,8 @@ export default {
 <style scoped>
 #iconsThumbs {
   width: 50%;
-  padding: 5px 10px;
-  margin: 1%;
-  font-size: 2.5vw;
+  align-self: center;
+  padding: 3%;
 }
 
 button {
@@ -89,8 +87,12 @@ button {
   outline-style: none;
 }
 
-#ThumbsUp {
-  filter: grayscale(100%);
+#Up {
+  color: green;
+}
+
+#Down {
+  color: red;
 }
 
 .active {

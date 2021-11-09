@@ -59,6 +59,7 @@
     <div class="form-row">
       <!-- Lorsqu'on clique sur le bouton, on appelle la méthode "login" -->
       <button
+        id="login"
         @click="login()"
         class="button"
         :class="{ 'button--disabled': !validatedFields }"
@@ -69,6 +70,7 @@
       </button>
       <!-- Lorsqu'on clique sur le boutton, on appelle la méthode createAccount. -->
       <button
+        id="account"
         @click="createAccount()"
         class="button"
         :class="{ 'button--disabled': !validatedFields }"

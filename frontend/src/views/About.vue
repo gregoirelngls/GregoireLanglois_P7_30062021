@@ -2,8 +2,7 @@
   <div id="app">
     <Header />
     <h1>
-      C'est juste pour voir si ça fonctionne bien ahah et je usis trop contente
-      car ça marche ahahahahahahahahaha
+      Groupomania est un reseau social d'entreprise
     </h1>
   </div>
 </template>

@@ -1,22 +1,19 @@
 <template>
-<router-view></router-view>
+  <router-view></router-view>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
-  components: {
-  }
-}
+  name: "App",
+  components: {},
+};
 </script>
 
 <style>
-
-body{
-  background-color:rgb(255, 133, 133);
+body {
+  background: linear-gradient(0.25turn, #ffffff, #ff4150, #ffffff);
   margin-left: auto;
   margin-right: auto;
-  width:100%;
+  width: 100%;
 }
 </style>

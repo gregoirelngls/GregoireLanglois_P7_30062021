@@ -8,19 +8,19 @@
       <ul id="icons">
         <li class="nav-barre">
           <router-link class="routerLink" to="/messages">
-            <i class="fas fa-comments"></i>
+            <i class="fas fa-comments" aria-hidden="true"> </i>
           </router-link>
         </li>
 
         <li class="nav-barre">
           <router-link class="routerLink" to="/user">
-            <i class="fas fa-user"></i>
+            <i class="fas fa-user" aria-hidden="true"></i>
           </router-link>
         </li>
 
         <li class="nav-barre">
           <router-link class="routerLink" to="/About">
-            <i class="fas fa-question-circle"></i>
+            <i class="fas fa-question-circle" aria-hidden="true"></i>
           </router-link>
         </li>
       </ul>
@@ -65,8 +65,9 @@ nav {
 }
 
 #icons i {
-  color: rgb(255, 122, 122);
+  color: rgb(24, 124, 122);
   text-decoration: none;
+  font-size: 3vw;
 }
 
 .nav-barre {
@@ -74,6 +75,6 @@ nav {
 }
 
 #icons li :hover {
-  color: crimson;
+  color: rgb(0, 51, 36);
 }
 </style>

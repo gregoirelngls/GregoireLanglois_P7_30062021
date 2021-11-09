@@ -9,14 +9,17 @@
         class="formulaire"
         @submit.prevent="sendMessage"
       >
+        <label for="input_text" id="label">
+          Vous pouvez nous raconter une histoire</label
+        >
         <textarea
           class="tag area"
           name="content"
-          ROWS="2"
+          ROWS="3"
           COLS="5"
           v-model="content"
         ></textarea>
-        <label for="file" class="label"> </label>
+        <label for="file" id="label"> Choisissez votre fichier</label>
         <input
           name="attachment"
           ref="file"
@@ -26,7 +29,9 @@
           aria-describedby="inputFileAddon"
           @change="onFileChange"
         />
-        <button type="submit" class="tag button-send">Envoyer</button>
+        <button id="submit" type="submit" class="tag button-send">
+          Envoyer
+        </button>
       </form>
     </div>
   </div>
@@ -92,12 +97,11 @@ export default {
 
 .formulaireType {
   flex-direction: column;
-  width: 60%;
-  justify-content: center;
+  width: 50%;
   background-color: white;
   margin: 0 auto;
   border: 3px solid rgb(4, 4, 122);
-  border-radius: 10px;
+  border-radius: 15px;
 }
 
 textarea:focus {
@@ -105,10 +109,11 @@ textarea:focus {
 }
 
 h1 {
-  font-size: 4vw;
   text-align: center;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-family: Impact, "Arial Narrow Bold", sans-serif;
   margin: 0;
+  padding-top: 2%;
+  font-size: inherit;
 }
 
 form {
@@ -126,7 +131,7 @@ form {
   border-radius: 2em;
   font-family: impact;
   width: 20%;
-  font-size: 2vw;
+  font-size: 1.5vw;
   margin: 2%;
 }
 
@@ -136,5 +141,25 @@ form {
 
 .files {
   font-family: impact;
+}
+
+#inputFile {
+  font-size: 1.5vw;
+}
+
+#label {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .formulaireType {
+    width: 35%;
+  }
+}
+
+@media (max-width: 670px) {
+  .formulaireType {
+    width: 80%;
+  }
 }
 </style>

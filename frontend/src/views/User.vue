@@ -1,24 +1,32 @@
 <template>
   <div id="app">
     <Header />
-    <h1>Gestion du compte utilisateur</h1>
     <div id="infoUser">
+      <h1>Gestion du compte utilisateur</h1>
       <div class="infoUser__fields">
         <div id="infoProfil" v-bind:key="User.id" v-for="User in Users"></div>
-        <span class="userEmail"> Adresse e-mail : {{ User.email }} </span><br />
-        <span class="userUsername">
-          Nom d'utilisateur : {{ User.username }} </span
+        <span class="user">
+          <span id="strong"> Adresse e-mail : </span> {{ User.email }} </span
         ><br />
-        <span class="userBio"> Votre biographie : {{ User.bio }} </span><br />
+
+        <span class="user">
+          <span id="strong"> Nom d'utilisateur : </span>
+          {{ User.username }} </span
+        ><br />
+        <span class="user">
+          <span id="strong"> Votre biographie : </span>{{ User.bio }} </span
+        ><br />
       </div>
       <div id="buttons">
-        <button @click="logOut" class="button logOut">
+        <button id="logout" @click="logOut" class="button logOut">
           Se déconnecter
         </button>
-        <button @click="modifyAccount" class="button modifyAccount">
-          Modifier
-        </button>
-        <button @click="deleteAccount(id)" class="button deleteAccount">
+
+        <button
+          id="deleteaccount"
+          @click="deleteAccount(id)"
+          class="button deleteAccount"
+        >
           Supprimer
         </button>
       </div>
@@ -90,7 +98,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #infoUser {
   border: 2px solid blue;
   background-color: white;
@@ -98,9 +106,20 @@ export default {
   margin: 0;
   border-radius: 10px;
   margin-left: 25%;
+  margin-top: 5%;
+}
+
+.infoUser__fields {
+  padding: 4%;
+}
+
+#buttons {
+  display: flex;
+  flex-direction: column;
 }
 
 .button {
+  font-weight: bold;
   color: white;
   font-size: 1.5vw;
   padding: 5px 10px;
@@ -123,5 +142,27 @@ export default {
 
 .deleteAccount {
   background-color: rgb(175, 0, 0);
+}
+
+h1 {
+  font-size: 3vw;
+}
+
+.user {
+  font-size: 1em;
+}
+
+#strong {
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 620px) {
+  .user {
+    font-size: 0.7em;
+  }
+
+  #infoUser {
+    margin-top: 10%;
+  }
 }
 </style>

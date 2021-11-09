@@ -7,8 +7,9 @@
         enctype="multipart/form-data"
         id="myForm"
         class="formulaire"
-        @submit.prevent="sendModifMessage()"
+        @submit.prevent="updateMessage"
       >
+        <label for="input_text"></label>
         <textarea
           id="message"
           type="text"
@@ -19,7 +20,7 @@
           v-bind:placeholder="message.content"
           v-model="message.content"
         ></textarea>
-        <label for="file" class="label"> </label>
+        <label for="file" class="label"></label>
         <input
           name="attachment"
           ref="file"
@@ -31,11 +32,13 @@
         />
 
         <div class="btn modifPost">
-          <button type="submit" class="tag button-send">
-            Envoyer
+          <button id="modify" type="submit" class="tag button-send">
+            Modifier
           </button>
           <router-link class="routerLink" to="/messages">
-            <button type="submit" class="tag button-send">Annuler</button>
+            <button id="cancel" type="submit" class="tag button-send">
+              Annuler
+            </button>
           </router-link>
         </div>
       </form>
@@ -76,6 +79,7 @@ export default {
       axios
         .get("http://localhost:3000/api/message/edit/" + this.id)
         .then((response) => {
+          console.log(response.data);
           let data = response.data;
           this.message.content = data.content;
           this.message.attachment = data.attachment;
@@ -86,19 +90,26 @@ export default {
         });
     },
 
-    updateArticle() {
+    updateMessage(e) {
+      e.preventDefault();
+      axios.defaults.headers["Authorization"] =
+        "Bearer " + JSON.parse(localStorage.getItem("user")).token;
+      const fd = new FormData();
+      fd.append("file", this.message.attachment);
+      fd.append("content", this.message.content);
+      let self = this;
       axios
-        .put(`/${this.id}`, {
-          title: this.article.title,
-          body: this.article.body,
-          image: this.article.image,
+        .put("http://localhost:3000/api/message/update/" + this.id, fd, {
+          headers: {
+            ContentType: "multipart/form-data",
+            Authorization:
+              "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+          },
         })
-        .then((response) => {
-          let data = response.data;
-          console.log(data);
-          this.data = alert("l'article a bien été modifié");
-          this.$router.replace({
-            name: "Home",
+        .then(() => {
+          alert("l'article a bien été modifié");
+          self.$router.replace({
+            name: "wall",
           });
         })
         .catch((error) => {
@@ -110,7 +121,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #modifPost {
   width: 50%;
   display: flex;
@@ -120,5 +131,9 @@ export default {
   border: 1px solid black;
   background-color: white;
   border-radius: 10px;
+}
+
+h1 {
+  font-size: 2vw;
 }
 </style>
