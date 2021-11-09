@@ -9,26 +9,30 @@
         class="formulaire"
         @submit.prevent="sendMessage"
       >
-        <label for="input_text" id="label">
-          Vous pouvez nous raconter une histoire</label
-        >
-        <textarea
-          class="tag area"
-          name="content"
-          ROWS="3"
-          COLS="5"
-          v-model="content"
-        ></textarea>
-        <label for="file" id="label"> Choisissez votre fichier</label>
-        <input
-          name="attachment"
-          ref="file"
-          type="file"
-          class="tag files"
-          id="inputFile"
-          aria-describedby="inputFileAddon"
-          @change="onFileChange"
-        />
+        <div id="textarea">
+          <label class="label" for="form">Tell us your story:</label>
+          <textarea
+            id="form"
+            class="tag area"
+            name="content"
+            ROWS="3"
+            COLS="5"
+            v-model="content"
+            required="required"
+          ></textarea>
+        </div>
+        <div class="uploadfiles">
+          <label for="inputFile" class="label"> Choisissez votre fichier</label>
+          <input
+            name="attachment"
+            ref="file"
+            type="file"
+            class="tag files"
+            id="inputFile"
+            aria-describedby="inputFileAddon"
+            @change="onFileChange"
+          />
+        </div>
         <button id="submit" type="submit" class="tag button-send">
           Envoyer
         </button>
@@ -125,6 +129,7 @@ form {
   margin-top: 2%;
   background-color: antiquewhite;
   font-size: 2vw;
+  width: 100%;
 }
 
 .button-send {
@@ -147,7 +152,7 @@ form {
   font-size: 1.5vw;
 }
 
-#label {
+.label {
   display: none;
 }
 

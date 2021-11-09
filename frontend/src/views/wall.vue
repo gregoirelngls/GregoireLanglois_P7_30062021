@@ -23,18 +23,16 @@
           <div id="btns">
             <p v-if="userId == message.userId">
               <button
-                aria-label="supression du message"
-                id="btn_delete"
                 class="button deleteMessage"
+                aria-label="supression du message"
                 @click="deleteMessage(message.id)"
               >
                 DELETE
               </button>
               <router-link class="routerLink" :to="`/Edit/${message.id}`">
                 <button
-                  aria-label="modification du message"
-                  id="btn_update"
                   class="button updateMessage"
+                  aria-label="modification du message"
                 >
                   UPDATE
                 </button>
@@ -151,10 +149,12 @@ img {
 
 .button {
   color: white;
-  font-size: 1.5vw;
+  font-size: 1vw;
   padding: 5px 10px;
   border-radius: 10px;
   margin-left: 6%;
+  font-weight: bold;
+  margin-top: 2%;
 }
 .button:focus {
   outline: none;

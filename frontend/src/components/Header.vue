@@ -7,19 +7,31 @@
 
       <ul id="icons">
         <li class="nav-barre">
-          <router-link class="routerLink" to="/messages">
+          <router-link
+            class="routerLink"
+            to="/messages"
+            aria-label="message sur le mur"
+          >
             <i class="fas fa-comments" aria-hidden="true"> </i>
           </router-link>
         </li>
 
         <li class="nav-barre">
-          <router-link class="routerLink" to="/user">
+          <router-link
+            class="routerLink"
+            to="/user"
+            aria-label="Gestion du compte utilisateur"
+          >
             <i class="fas fa-user" aria-hidden="true"></i>
           </router-link>
         </li>
 
         <li class="nav-barre">
-          <router-link class="routerLink" to="/About">
+          <router-link
+            class="routerLink"
+            to="/About"
+            aria-label="A propos de groupomania"
+          >
             <i class="fas fa-question-circle" aria-hidden="true"></i>
           </router-link>
         </li>
