@@ -10,7 +10,8 @@ const cors = require('cors');
 const rateLimit = require("express-rate-limit");
 // Importation du module permettant le telechargement de fichier (png, jpeg, gif ...)
 const fileUpload = require('express-fileupload');
-
+// Importation du module permettant la compression des fichiers en GZIP et augment ainsi la performance du site
+const compression = require('compression');
 // Importation des module pour protéger l'application des vulnérabilités (requêtes HTTP, DNS navigateur, en-têtes ...)
 const helmet = require('helmet');
 const session = require('cookie-session');
@@ -35,7 +36,8 @@ app.use(cors())
 // Connection entre le module FileUpload et le server Node.
 app.use(fileUpload());
 
-
+// Utilisatation de la librairie "compression"
+app.use(compression());
 
 // Middleware Header pour contourner les erreurs en débloquant certains systèmes de sécurité CORS, afin que tout le monde puisse faire des requetes depuis son navigateur
 app.use((req, res, next) => {

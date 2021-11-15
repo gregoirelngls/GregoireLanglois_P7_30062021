@@ -138,7 +138,8 @@ module.exports ={
       if (userFound) {
         return res.status(201).json({
           'userId': userFound.id,
-          'token': jwtUtils.generateToken(userFound)
+          'token': jwtUtils.generateToken(userFound),
+          'isAdmin': userFound.isAdmin
         });
       } else {
         return res.status(500).json({ 'error': 'cannot log on user' });
