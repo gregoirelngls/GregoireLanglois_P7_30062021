@@ -66,7 +66,7 @@ export default {
         })
         .then((response) => {
           this.User = response.data;
-          console.log(this.User.id);
+          console.log(this.User);
         })
         .catch((error) => console.log(error));
     },

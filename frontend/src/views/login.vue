@@ -53,7 +53,9 @@
       Adresse mail et/ou mot de passe invalide
     </div>
     <!-- si le status nous renvoi à la méthode error_create, on envoie le message qui suit. -->
-    <div class="form-row"></div>
+    <div class="form-row" v-if="mode == 'create' && status == 'error_create'">
+      Adresse mail déjà utilisée
+    </div>
     <!-- Utilisation du BEM pour le button--disabled. Quand les champs sont bien renseignés, le button "disabled" s'enlève,
     et nos champs sont cliquables.-->
     <div class="form-row">

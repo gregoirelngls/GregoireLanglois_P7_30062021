@@ -21,7 +21,7 @@
           <Thumbs :message="message" />
 
           <div id="btns">
-            <p v-if="userId == message.userId">
+            <p v-if="$store.state.user.isAdmin || userId == message.userId">
               <button
                 class="button deleteMessage"
                 aria-label="supression du message"

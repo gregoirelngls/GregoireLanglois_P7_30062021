@@ -2,7 +2,7 @@
   <div id="iconsThumbs">
     <button aria-label="Thumbs up">
       <i
-        @click.prevent="likeMessage"
+        @click="incrementLike()"
         class="fas fa-thumbs-up"
         aria-hidden="true"
       ></i>
@@ -27,29 +27,29 @@ export default {
   props: ["message"],
   data() {
     return {
-      totallike: 0,
+      totalLike: 0,
       totaldislike: 0,
-      alReadyLiked: false,
-      alReadyDisliked: false,
     };
   },
   computed: {},
   methods: {
-    likeMessage() {
-      this.totallike += 1;
-      axios.defaults.headers["Authorization"] =
-        "Bearer " + JSON.parse(localStorage.getItem("user")).token;
-      axios
-        .post(
-          "http://localhost:3000/api/messages/vote/like/" + this.message.id,
-          {
-            headers: {
-              ContentType: "application/json",
-            },
+    incrementLike: function() {
+      // pas d'accès au "this" car nous sommes dans un sous élement, on créer donc une constante "self" qu reprend l'élement "this".
+      const self = this;
+      this.$store
+        .dispatch("incrementLike", {
+          message: this.message,
+          // Une fois que la connexion s'est bien effectué, on passe dans le".then", et on affiche le mur avec les messages de tous les utilisateurs.
+        })
+        .then(
+          function(response) {
+            console.log("hellllo", response);
+            self.$router.push("/messages");
+          },
+          function(error) {
+            console.log(error);
           }
-        )
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err));
+        );
     },
 
     dislikeMessage() {

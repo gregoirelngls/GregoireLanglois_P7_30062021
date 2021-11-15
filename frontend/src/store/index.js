@@ -37,7 +37,15 @@ const store = createStore({
       username:'',
       email: '',
       bio: '',
+      isAdmin: false,
     },
+    message:{
+
+    },
+    totalLike:0,
+  },
+  getter: {
+
   },
   // Puisqu'un état de store de Vuex est rendu réactif par Vue,
   // lorsque nous mutons l'état, les composants Vue observant cet état seront automatiquement mis à jour.
@@ -48,6 +56,7 @@ const store = createStore({
     logUser: function (state, user) {
       instance.defaults.headers.common['Authorization'] = user.token;
       localStorage.setItem('user', JSON.stringify(user));
+      console.log("bonjour", user);
       state.user = user;
     },
     userInfos: function (state, userInfos) {
@@ -59,6 +68,9 @@ const store = createStore({
         token: '',
       }
       localStorage.removeItem('user');
+    },
+    totalLike: function (state) {
+      state.totalLike++;
     }
   },
   actions: {
@@ -101,7 +113,23 @@ const store = createStore({
           reject(error);
         });
       });
-    }
+    },
+    // incrementLike: ({commit}, totalLike) => {
+    //   console.log(totalLike);
+    //   return new Promise((resolve, reject) => {
+    //     commit;
+    //     instance.post('messages/vote/like/' + message.id)
+    //     .then(function (response) {
+    //       commit('incrementLike', 'userInfos');
+    //       resolve(response);
+    //       console.log(response);
+    //     })
+    //     .catch(function (error) {
+    //       commit('incrementLike', '');
+    //       reject(error);
+    //     });
+    //   })
+    // }
   }
 })
 
