@@ -79,14 +79,13 @@ export default {
       axios
         .get("http://localhost:3000/api/message/edit/" + this.id)
         .then((response) => {
-          console.log(response.data);
           let data = response.data;
           this.message.content = data.content;
           this.message.attachment = data.attachment;
         })
         .catch((error) => {
+          console.log(error);
           this.data = alert("erreur, rien a afficher !");
-          console.log("pas bien" + error);
         });
     },
 
@@ -135,5 +134,20 @@ export default {
 
 h1 {
   font-size: 2vw;
+}
+
+@media only screen and (max-width: 620px) {
+  #modifPost {
+    width: 80%;
+    margin: auto;
+    margin-top: 20%;
+  }
+
+  .button-send {
+    border-radius: 2em;
+    font-size: 2vw;
+    margin: 2%;
+    width: 50%;
+  }
 }
 </style>

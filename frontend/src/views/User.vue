@@ -66,7 +66,6 @@ export default {
         })
         .then((response) => {
           this.User = response.data;
-          console.log(this.User);
         })
         .catch((error) => console.log(error));
     },
@@ -158,11 +157,22 @@ h1 {
 
 @media only screen and (max-width: 620px) {
   .user {
-    font-size: 0.7em;
+    font-size: 1em;
   }
 
   #infoUser {
-    margin-top: 10%;
+    width: 80%;
+    margin: auto;
+    margin-top: 20%;
+  }
+
+  .button {
+    font-weight: bold;
+    color: white;
+    font-size: 3vw;
+    padding: 5px 10px;
+    margin: 2%;
+    border-radius: 10px;
   }
 }
 </style>

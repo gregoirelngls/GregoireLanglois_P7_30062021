@@ -81,13 +81,12 @@ export default {
         })
         .then((response) => {
           this.messages = response.data;
-          console.log(this.messages);
           this.messages.map((message) => {
             message.attachment = require(`../assets/${message.attachment}`);
             return message;
           });
         })
-        .catch(() => console.log());
+        .catch((error) => console.log(error));
     },
 
     deleteMessage(id) {

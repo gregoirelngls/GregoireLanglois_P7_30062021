@@ -1,21 +1,24 @@
 <template>
   <div id="iconsThumbs">
-    <button aria-label="Thumbs up">
+    <button aria-label="Thumbs up" @click.prevent="likeMessage">
       <i
-        @click="incrementLike()"
         class="fas fa-thumbs-up"
         aria-hidden="true"
+        :class="{ active: isActiveUp }"
+        @click="isActiveUp = !isActiveUp"
       ></i>
     </button>
-    {{ totallike }}
-    <button aria-label="Thumbs down">
+    {{ totalLike }}
+
+    <button aria-label="Thumbs down" @click.prevent="dislikeMessage">
       <i
-        @click.prevent="dislikeMessage"
         class="fa fa-thumbs-down"
         aria-hidden="true"
+        :class="{ active: isActiveDown }"
+        @click="isActiveDown = !isActiveDown"
       ></i>
     </button>
-    {{ totaldislike }}
+    {{ totalDislike }}
   </div>
 </template>
 
@@ -28,40 +31,40 @@ export default {
   data() {
     return {
       totalLike: 0,
-      totaldislike: 0,
+      totalDislike: 0,
+      isActiveDown: false,
+      isActiveUp: false,
     };
   },
   computed: {},
   methods: {
-    incrementLike: function() {
-      // pas d'accès au "this" car nous sommes dans un sous élement, on créer donc une constante "self" qu reprend l'élement "this".
-      const self = this;
-      this.$store
-        .dispatch("incrementLike", {
-          message: this.message,
-          // Une fois que la connexion s'est bien effectué, on passe dans le".then", et on affiche le mur avec les messages de tous les utilisateurs.
-        })
-        .then(
-          function(response) {
-            console.log("hellllo", response);
-            self.$router.push("/messages");
-          },
-          function(error) {
-            console.log(error);
+    likeMessage() {
+      this.totalLike += 1;
+      axios.defaults.headers["Authorization"] =
+        "Bearer " + JSON.parse(localStorage.getItem("user")).token;
+      axios
+        .post(
+          "http://localhost:3000/api/messages/vote/like/" + this.message.id,
+          {
+            headers: {
+              "content-type": "application/json",
+            },
           }
-        );
+        )
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error));
     },
 
     dislikeMessage() {
       this.totaldislike -= 1;
+      axios.defaults.headers["Authorization"] =
+        "Bearer " + JSON.parse(localStorage.getItem("user")).token;
       axios
         .post(
           "http://localhost:3000/api/messages/vote/dislike/" + this.message.id,
           {
             headers: {
               "content-type": "application/json",
-              Authorization:
-                "Bearer " + JSON.parse(localStorage.getItem("user")).token,
             },
           }
         )
@@ -87,19 +90,23 @@ button {
   outline-style: none;
 }
 
-#Up {
+i #iconsThumbs i {
+  margin: 3%;
+}
+
+.fa {
+  color: red;
+}
+
+.fas {
   color: green;
 }
 
-#Down {
-  color: red;
+i {
+  filter: grayscale(100%);
 }
 
 .active {
   filter: grayscale(0%);
-}
-
-#iconsThumbs i {
-  margin: 3%;
 }
 </style>

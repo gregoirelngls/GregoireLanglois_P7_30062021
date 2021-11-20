@@ -49,7 +49,7 @@ export default {
 
 <style scoped>
 #logo {
-  width: 100%;
+  width: 60%;
 }
 
 nav {
@@ -62,18 +62,17 @@ nav {
   top: 0em;
   display: flex;
   flex-direction: row;
+  width: 100%;
   padding: 1%;
 }
 
 #icons {
   list-style: none;
-  color: rgb(255, 122, 122);
   display: flex;
-  padding-left: 0;
   margin-bottom: 0;
-  padding-right: 3%;
-  font-size: 1.8em;
-  text-decoration: none;
+  width: 40%;
+  padding: 0%;
+  justify-content: flex-end;
 }
 
 #icons i {

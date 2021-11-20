@@ -29,7 +29,7 @@
             type="file"
             class="tag files"
             id="inputFile"
-            aria-describedby="inputFileAddon"
+            aria-label="inputFileAddon"
             @change="onFileChange"
           />
         </div>
@@ -117,7 +117,7 @@ h1 {
   font-family: Impact, "Arial Narrow Bold", sans-serif;
   margin: 0;
   padding-top: 2%;
-  font-size: inherit;
+  font-size: 2.7vw;
 }
 
 form {
