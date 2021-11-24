@@ -5,7 +5,6 @@
         class="fas fa-thumbs-up"
         aria-hidden="true"
         :class="{ active: isActiveUp }"
-        @click="isActiveUp = !isActiveUp"
       ></i>
     </button>
     {{ totalLike }}
@@ -15,7 +14,6 @@
         class="fa fa-thumbs-down"
         aria-hidden="true"
         :class="{ active: isActiveDown }"
-        @click="isActiveDown = !isActiveDown"
       ></i>
     </button>
     {{ totalDislike }}
@@ -24,22 +22,26 @@
 
 <script>
 import axios from "axios";
-
 export default {
   name: "Thumbs",
   props: ["message"],
   data() {
     return {
-      totalLike: 0,
-      totalDislike: 0,
-      isActiveDown: false,
-      isActiveUp: false,
+      totalLike: this.message.likes,
+      totalDislike: this.message.disLikes,
+      isActiveDown:
+        this.message.usersDisliked?.includes(
+          JSON.parse(localStorage.getItem("user")).userId
+        ) || false,
+      isActiveUp:
+        this.message.usersLiked?.includes(
+          JSON.parse(localStorage.getItem("user")).userId
+        ) || false,
     };
   },
   computed: {},
   methods: {
     likeMessage() {
-      this.totalLike += 1;
       axios.defaults.headers["Authorization"] =
         "Bearer " + JSON.parse(localStorage.getItem("user")).token;
       axios
@@ -51,12 +53,22 @@ export default {
             },
           }
         )
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
+        .then((response) => {
+          if (response.data.code === "likeMessage") {
+            this.isActiveUp = true;
+            this.totalLike += 1;
+            if (this.isActiveDown) {
+              this.isActiveDown = false;
+              this.totalDislike -= 1;
+            }
+          } else if (response.data.code === "noLikeMessage") {
+            this.isActiveUp = false;
+            this.totalLike -= 1;
+          }
+        })
+        .catch((error) => console.log("error ===>", error.error));
     },
-
     dislikeMessage() {
-      this.totaldislike -= 1;
       axios.defaults.headers["Authorization"] =
         "Bearer " + JSON.parse(localStorage.getItem("user")).token;
       axios
@@ -68,20 +80,30 @@ export default {
             },
           }
         )
-        .then((response) => console.log(response))
+        .then((response) => {
+          if (response.data.code === "disLikeMessage") {
+            this.isActiveDown = true;
+            this.totalDislike += 1;
+            if (this.isActiveUp) {
+              this.isActiveUp = false;
+              this.totalLike -= 1;
+            }
+          } else if (response.data.code === "noDislikeMessage") {
+            this.isActiveDown = false;
+            this.totalDislike -= 1;
+          }
+        })
         .catch((error) => console.log(error));
     },
   },
 };
 </script>
-
 <style scoped>
 #iconsThumbs {
   width: 50%;
   align-self: center;
   padding: 3%;
 }
-
 button {
   background: transparent;
   border: none;
@@ -89,23 +111,18 @@ button {
   padding: 0;
   outline-style: none;
 }
-
 i #iconsThumbs i {
   margin: 3%;
 }
-
 .fa {
   color: red;
 }
-
 .fas {
   color: green;
 }
-
 i {
   filter: grayscale(100%);
 }
-
 .active {
   filter: grayscale(0%);
 }
