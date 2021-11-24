@@ -1,4 +1,7 @@
 'use strict';
+
+const { INTEGER } = require("sequelize");
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Messages', {
@@ -28,6 +31,18 @@ module.exports = {
       likes: {
         allowNull: false,
         type: Sequelize.INTEGER
+      },
+      disLikes: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      usersLiked: {
+        allowNull: true,
+        type: Sequelize.JSON
+      },
+      usersDisliked: {
+        allowNull: true,
+        type: Sequelize.JSON
       },
       createdAt: {
         allowNull: false,

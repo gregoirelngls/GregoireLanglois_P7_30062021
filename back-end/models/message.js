@@ -4,7 +4,10 @@ module.exports = (sequelize, DataTypes) => {
     content: DataTypes.STRING,
     attachment: DataTypes.STRING,
     likes: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER
+    disLikes: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER,
+    usersLiked: '',
+    usersDisliked: ''
   }, {
     classMethods: {
       associate: function(models) {
