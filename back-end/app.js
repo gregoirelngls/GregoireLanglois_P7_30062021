@@ -16,6 +16,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 const session = require('cookie-session');
 const nocache = require('nocache');
+const dotenv = require('dotenv');
 
 // Déclaration des routes pour les Utilisateurs, les messages et les likes.
 const userRoutes = require('./routes/user.js');
